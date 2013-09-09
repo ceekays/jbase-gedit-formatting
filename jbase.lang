@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ Author: Edmond Kachale <kachaleedmond@gmail.com>
+ Copyright (C) 2013 Edmond Kachale <kachaleedmond@gmail.com>
+
+ This library is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+-->
+
+<language id="jbase" _name="jBASE" version="2.0" _section="Sources">
+  <metadata>
+    <property name="mimetypes">application/x-jbase;text/x-jbase</property>
+    <property name="globs">*.jbc;*.jbase;*.JBASE;*.JBC</property>
+    <property name="line-comment-start">\*</property>
+  </metadata>
+
+    <styles>
+        <style id="boolean"           _name="Boolean value"       map-to="def:boolean"/>
+        <style id="char"              _name="Character"           map-to="def:character"/>
+        <style id="comment"           _name="Comment"             map-to="def:comment"/>
+        <style id="common-defines"    _name="Common Defines"      map-to="def:special-constant"/>
+        <style id="decimal"           _name="Decimal number"      map-to="def:decimal"/>
+        <style id="error"             _name="Error"               map-to="def:error"/>
+        <style id="escaped-character" _name="Escaped Character"   map-to="def:special-char"/>
+        <style id="floating-point"    _name="Floating point number" map-to="def:floating-point"/>
+        <style id="function"          _name="Function"            map-to="def:function"/>
+        <style id="hexadecimal"       _name="Hexadecimal number"  map-to="def:base-n-integer"/>
+        <style id="included-file"     _name="Included File"       map-to="def:string"/>
+        <style id="jbase-paragraph"   _name="Variable"            map-to="def:identifier"/>
+        <style id="jbase-statement"   _name="Variable"            map-to="def:type"/>
+        <style id="keyword"           _name="Keyword"             map-to="def:keyword"/>
+        <style id="octal"             _name="Octal number"        map-to="def:base-n-integer"/>
+        <style id="preprocessor"      _name="Preprocessor"        map-to="def:preprocessor"/>
+        <style id="printf"            _name="printf Conversion"   map-to="def:special-char"/>
+        <style id="storage-class"     _name="Storage Class"       map-to="def:type"/>
+        <style id="string"            _name="String"              map-to="def:string"/>
+        <style id="type"              _name="Data Type"           map-to="def:type"/>
+    </styles>
+
+    <definitions>
+
+        <define-regex id="identifiers">[a-zA-Z_][a-zA-Z0-9._-]*</define-regex>
+
+        <context id="escape" style-ref="escaped-character">
+            <match>\\.</match>
+        </context>
+
+        <!-- Comments -->
+        <context id="comment" style-ref="comment" end-at-line-end="true" class="comment" class-disabled="no-spell-check">
+            <start>\*</start>
+
+            <include>
+                <context ref="def:in-line-comment"/>
+            </include>
+        </context>
+
+        <context id="preprocessor" style-ref="preprocessor" end-at-line-end="true">
+            <start>\$INSERT\b\s*</start>
+        </context>
+
+        <!-- http://www.lysator.liu.se/c/ANSI-C-grammar-l.html -->
+        <context id="float" style-ref="floating-point">
+            <match extended="true">
+                (?&lt;![\w\.])
+                ((\.[0-9]+ | [0-9]+\.[0-9]*) ([Ee][+-]?[0-9]*)? |
+                ([0-9]+[Ee][+-]?[0-9]*))
+                [fFlL]?
+                (?![\w\.])
+            </match>
+        </context>
+
+        <context id="hexadecimal" style-ref="hexadecimal">
+            <match extended="true">
+                (?&lt;![\w\.])
+                0[xX][a-fA-F0-9]+[uUlL]*
+                (?![\w\.])
+            </match>
+        </context>
+
+        <context id="octal" style-ref="octal">
+            <match extended="true">
+                (?&lt;![\w\.])
+                0[0-7]+[uUlL]*
+                (?![\w\.])
+            </match>
+        </context>
+
+        <context id="decimal" style-ref="decimal">
+            <match extended="true">
+                (?&lt;![\w\.])
+                [0-9]+[uUlL]*
+                (?![\w\.])
+            </match>
+        </context>
+
+        <context id="double-quoted-string" style-ref="string" class="string" class-disabled="no-spell-check">
+            <start>"</start>
+            <end>"</end>
+        </context>
+
+        <context id="single-quoted-string" style-ref="string" class="string" class-disabled="no-spell-check">
+            <start>'</start>
+            <end>'</end>
+        </context>
+
+        <!-- Keywords -->
+        <context id="keywords" style-ref="keyword" class="keyword">
+            <keyword>BEGIN</keyword>
+            <keyword>CASE</keyword>
+            <keyword>DO</keyword>
+            <keyword>ELSE</keyword>
+            <keyword>END</keyword>
+            <keyword>ERROR</keyword>
+            <keyword>FOR</keyword>
+            <keyword>FROM</keyword>
+            <keyword>GO</keyword>
+            <keyword>GOSUB</keyword>
+            <keyword>GOTO</keyword>
+            <keyword>IF</keyword>
+            <keyword>IN</keyword>
+            <keyword>LOOP</keyword>
+            <keyword>NEXT</keyword>
+            <keyword>ON</keyword>
+            <keyword>REPEAT</keyword>
+            <keyword>THEN</keyword>
+            <keyword>TO</keyword>
+            <keyword>UNTIL</keyword>
+            <keyword>WHILE</keyword>
+            <keyword>AND</keyword>
+            <keyword>EQ</keyword>
+            <keyword>GT</keyword>
+            <keyword>LT</keyword>
+            <keyword>MATCH</keyword>
+            <keyword>MATCHES</keyword>
+            <keyword>NE</keyword>
+            <keyword>NOT</keyword>
+            <keyword>OFF</keyword>
+            <keyword>ON</keyword>
+            <keyword>OR</keyword>
+            <keyword>PROGRAM</keyword>
+            <keyword>SUBROUTINE</keyword>
+            <keyword>STEP</keyword>
+        </context>
+
+        <context id="functions" style-ref="function" class="function">
+            <keyword>@</keyword>
+            <keyword>ABS</keyword>
+            <keyword>ABSS</keyword>
+            <keyword>ADDS</keyword>
+            <keyword>ALPHA</keyword>
+            <keyword>ANDS</keyword>
+            <keyword>ASCII</keyword>
+            <keyword>ASSIGNED</keyword>
+            <keyword>BITCHANGE</keyword>
+            <keyword>BITCHECK</keyword>
+            <keyword>BITRESET</keyword>
+            <keyword>BITSET</keyword>
+            <keyword>BYTELEN</keyword>
+            <keyword>CATS</keyword>
+            <keyword>CHANGETIMESTAMP</keyword>
+            <keyword>CHAR</keyword>
+            <keyword>CHARS</keyword>
+            <keyword>CHDIR</keyword>
+            <keyword>CHECKSUM</keyword>
+            <keyword>COL1</keyword>
+            <keyword>COL2</keyword>
+            <keyword>COMPARE</keyword>
+            <keyword>CONVERT</keyword>
+            <keyword>COS</keyword>
+            <keyword>COUNT</keyword>
+            <keyword>COUNTS</keyword>
+            <keyword>DATE</keyword>
+            <keyword>DCOUNT</keyword>
+            <keyword>DECRYPT</keyword>
+            <keyword>DIV</keyword>
+            <keyword>DIVS</keyword>
+            <keyword>DOWNCASE</keyword>
+            <keyword>DQUOTE</keyword>
+            <keyword>DROUND</keyword>
+            <keyword>DTX</keyword>
+            <keyword>DYNTOXML</keyword>
+            <keyword>EBCDIC</keyword>
+            <keyword>ENCRYPT</keyword>
+            <keyword>EQS</keyword>
+            <keyword>EREPLACE</keyword>
+            <keyword>EXIT</keyword>
+            <keyword>EXP</keyword>
+            <keyword>EXTRACT</keyword>
+            <keyword>FIELD</keyword>
+            <keyword>FIELDS</keyword>
+            <keyword>FILEINFO</keyword>
+            <keyword>GES</keyword>
+            <keyword>GETCWD</keyword>
+            <keyword>GETENV</keyword>
+            <keyword>GETUSERGROUP</keyword>
+            <keyword>GROUP</keyword>
+            <keyword>ICONV</keyword>
+            <keyword>ICONVS</keyword>
+            <keyword>IFS</keyword>
+            <keyword>INDEX</keyword>
+            <keyword>INMAT</keyword>
+            <keyword>INSERT</keyword>
+            <keyword>INT</keyword>
+            <keyword>ISALNUM</keyword>
+            <keyword>ISALPHA</keyword>
+            <keyword>ISCNTRL</keyword>
+            <keyword>ISDIGIT</keyword>
+            <keyword>ISLOWER</keyword>
+            <keyword>ISPRINT</keyword>
+            <keyword>ISSPACE</keyword>
+            <keyword>ISUPPER</keyword>
+            <keyword>ITYPE</keyword>
+            <keyword>JBASECOREDUMP</keyword>
+            <keyword>JBASETHREADCreate</keyword>
+            <keyword>JBASETHREADStatus</keyword>
+            <keyword>JQLCOMPILE</keyword>
+            <keyword>JQLEXECUTE</keyword>
+            <keyword>JQLFETCH</keyword>
+            <keyword>JQLGETPROPERTY</keyword>
+            <keyword>JQLPUTPROPERTY</keyword>
+            <keyword>KEYIN</keyword>
+            <keyword>LATIN1</keyword>
+            <keyword>LEFT</keyword>
+            <keyword>LEN</keyword>
+            <keyword>LENDP</keyword>
+            <keyword>LENS</keyword>
+            <keyword>LES</keyword>
+            <keyword>LN</keyword>
+            <keyword>LOCALDATE</keyword>
+            <keyword>LOCALTIME</keyword>
+            <keyword>LOWCASE</keyword>
+            <keyword>LOWER</keyword>
+            <keyword>MAKETIMESTAMP</keyword>
+            <keyword>MATCHFIELD</keyword>
+            <keyword>MOD</keyword>
+            <keyword>MODS</keyword>
+            <keyword>MULS</keyword>
+            <keyword>NEGS</keyword>
+            <keyword>NES</keyword>
+            <keyword>NOTS</keyword>
+            <keyword>NUM</keyword>
+            <keyword>NUMS</keyword>
+            <keyword>OCONV</keyword>
+            <keyword>OCONVS</keyword>
+            <keyword>ORS</keyword>
+            <keyword>PUTENV</keyword>
+            <keyword>PWR</keyword>
+            <keyword>QUOTE</keyword>
+            <keyword>RAISE</keyword>
+            <keyword>RECORDLOCKED</keyword>
+            <keyword>REPLACE</keyword>
+            <keyword>RIGHT</keyword>
+            <keyword>RND</keyword>
+            <keyword>SADD</keyword>
+            <keyword>SDIV</keyword>
+            <keyword>SENTENCE</keyword>
+            <keyword>SEQ</keyword>
+            <keyword>SEQS</keyword>
+            <keyword>SIN</keyword>
+            <keyword>SMUL</keyword>
+            <keyword>SORT</keyword>
+            <keyword>SOUNDEX</keyword>
+            <keyword>SPACE</keyword>
+            <keyword>SPACES</keyword>
+            <keyword>SPLICE</keyword>
+            <keyword>SPOOLER</keyword>
+            <keyword>SQRT</keyword>
+            <keyword>SQUOTE</keyword>
+            <keyword>SSUB</keyword>
+            <keyword>STR</keyword>
+            <keyword>STRS</keyword>
+            <keyword>SUBS</keyword>
+            <keyword>SUBSTRINGS</keyword>
+            <keyword>SUM</keyword>
+            <keyword>SWAP</keyword>
+            <keyword>SYSTEM</keyword>
+            <keyword>TAN</keyword>
+            <keyword>TIME</keyword>
+            <keyword>TIMEDATE</keyword>
+            <keyword>TIMEDIFF</keyword>
+            <keyword>TIMESTAMP</keyword>
+            <keyword>TRANS</keyword>
+            <keyword>TRIM</keyword>
+            <keyword>TRIMB</keyword>
+            <keyword>TRIMBS</keyword>
+            <keyword>TRIMF</keyword>
+            <keyword>TRIMFS</keyword>
+            <keyword>UNASSIGNED</keyword>
+            <keyword>UNIQUEKEY</keyword>
+            <keyword>UPCASE</keyword>
+            <keyword>UTF8</keyword>
+            <keyword>XLATE</keyword>
+            <keyword>XMLTODYN</keyword>
+            <keyword>XMLTOXML</keyword>
+            <keyword>XTD</keyword>
+        </context>
+
+        <context id="jbase-functions" style-ref="function" class="function">
+            <keyword>ACCOUNT.SUSPENSE</keyword>
+            <keyword>APP.STATIC.TEXT</keyword>
+            <keyword>B.UPDATE.BATCH</keyword>
+            <keyword>CACHE.FILE</keyword>
+            <keyword>CACHE.READ</keyword>
+            <keyword>CALC.ERATE.LOCAL</keyword>
+            <keyword>CALCULATE.CHARGE</keyword>
+            <keyword>CDD</keyword>
+            <keyword>CDT</keyword>
+            <keyword>CFQ</keyword>
+            <keyword>CUSTRATE</keyword>
+            <keyword>DAS</keyword>
+            <keyword>DIETER.DATE</keyword>
+            <keyword>DUP</keyword>
+            <keyword>E.GET.LOCAL.AMT</keyword>
+            <keyword>E.GET.STMT.NARRATIVE</keyword>
+            <keyword>EB.CLEAR.FILE</keyword>
+            <keyword>EB.FORMAT</keyword>
+            <keyword>EB.FORMAT.RATE</keyword>
+            <keyword>EB.GET.ACCT.BALANCE</keyword>
+            <keyword>EB.GETFIELD</keyword>
+            <keyword>EB.LOCREF.SETUP</keyword>
+            <keyword>EB.READ.PARAMETER</keyword>
+            <keyword>EB.READLIST</keyword>
+            <keyword>EB.ROUND.AMOUNT</keyword>
+            <keyword>ERR</keyword>
+            <keyword>EXCHRATE</keyword>
+            <keyword>F.DELETE</keyword>
+            <keyword>F.LIVE.MATWRITE</keyword>
+            <keyword>F.LIVE.WRITE</keyword>
+            <keyword>F.MATREAD</keyword>
+            <keyword>F.MATREADU</keyword>
+            <keyword>F.MATWRITE</keyword>
+            <keyword>F.READ</keyword>
+            <keyword>F.READU</keyword>
+            <keyword>F.WRITE</keyword>
+            <keyword>FATAL.ERROR</keyword>
+            <keyword>FT.NULLS.CHK</keyword>
+            <keyword>GET.NARRATIVE</keyword>
+            <keyword>GET.SETTLEMENT.DEFAULTS</keyword>
+            <keyword>GET.STANDARD.SELECTION.DETS</keyword>
+            <keyword>JULDATE</keyword>
+            <keyword>LIMIT.CHECK</keyword>
+            <keyword>LIMIT.CURR.CONV</keyword>
+            <keyword>LIMIT.GET.PRODUCT</keyword>
+            <keyword>LOAD.COMPANY</keyword>
+            <keyword>MIDDLE.RATE.CONV.CHECK</keyword>
+            <keyword>OFS.GLOBUS.MANAGER</keyword>
+            <keyword>OFS.POST.MESSAGE</keyword>
+            <keyword>OPF</keyword>
+            <keyword>PRINTER.CLOSE</keyword>
+            <keyword>PRINTER.OFF</keyword>
+            <keyword>PRINTER.ON</keyword>
+            <keyword>PRO</keyword>
+            <keyword>PST</keyword>
+            <keyword>RG.GET.LOCAL.TEXT</keyword>
+            <keyword>SC.CALC.YIELD</keyword>
+            <keyword>SPOOL.REPORT</keyword>
+            <keyword>STORE.END.ERROR</keyword>
+            <keyword>STORE.OVERRIDE</keyword>
+            <keyword>TRANSACTION.ABORT</keyword>
+            <keyword>TXT</keyword>
+        </context>
+
+        <context id="statements" style-ref="jbase-statement" class="jbase-statement">
+            <keyword>ABORT</keyword>
+            <keyword>BEFORE</keyword>
+            <keyword>BREAK</keyword>
+            <keyword>CALL</keyword>
+            <keyword>CALLC</keyword>
+            <keyword>CALLDOTNET</keyword>
+            <keyword>CALLJ</keyword>
+            <keyword>CALLONEXIT</keyword>
+            <keyword>CAPTURING</keyword>
+            <keyword>CHAIN</keyword>
+            <keyword>CHANGE</keyword>
+            <keyword>CLEAR</keyword>
+            <keyword>CLEARCOMMON</keyword>
+            <keyword>CLEARDATA</keyword>
+            <keyword>CLEARFILE</keyword>
+            <keyword>CLEARINPUT</keyword>
+            <keyword>CLEARSELECT</keyword>
+            <keyword>CLOSE</keyword>
+            <keyword>CLOSESEQ</keyword>
+            <keyword>COLLECTDATA</keyword>
+            <keyword>COMMON</keyword>
+            <keyword>CONTINUE</keyword>
+            <keyword>CONVERT</keyword>
+            <keyword>CREATE</keyword>
+            <keyword>CRT</keyword>
+            <keyword>DATA</keyword>
+            <keyword>DEBUG</keyword>
+            <keyword>DEFC</keyword>
+            <keyword>DEFCE</keyword>
+            <keyword>DEFFUN</keyword>
+            <keyword>DEL</keyword>
+            <keyword>DELETE</keyword>
+            <keyword>DELETELIST</keyword>
+            <keyword>DELETESEQ</keyword>
+            <keyword>DELETEU</keyword>
+            <keyword>DIM</keyword>
+            <keyword>DIMENSION</keyword>
+            <keyword>ECHO</keyword>
+            <keyword>ENTER</keyword>
+            <keyword>EQU</keyword>
+            <keyword>EQUATE</keyword>
+            <keyword>EXECUTE</keyword>
+            <keyword>EXIT</keyword>
+            <keyword>FILELOCK</keyword>
+            <keyword>FILEUNLOCK</keyword>
+            <keyword>FIND</keyword>
+            <keyword>FINDSTR</keyword>
+            <keyword>FLUSH</keyword>
+            <keyword>FMT</keyword>
+            <keyword>FMTS</keyword>
+            <keyword>FOLD</keyword>
+            <keyword>FOOTING</keyword>
+            <keyword>FORMAT</keyword>
+            <keyword>FORMLIST</keyword>
+            <keyword>FUNCTION</keyword>
+            <keyword>GET</keyword>
+            <keyword>GETLIST</keyword>
+            <keyword>GETX</keyword>
+            <keyword>HEADING</keyword>
+            <keyword>HEADINGE</keyword>
+            <keyword>HEADINGN</keyword>
+            <keyword>HUSH</keyword>
+            <keyword>INPUT</keyword>
+            <keyword>INPUTNULL</keyword>
+            <keyword>INS</keyword>
+            <keyword>LOCATE</keyword>
+            <keyword>LOCK</keyword>
+            <keyword>MAT</keyword>
+            <keyword>MATBUILD</keyword>
+            <keyword>MATPARSE</keyword>
+            <keyword>MATREAD</keyword>
+            <keyword>MATREADU</keyword>
+            <keyword>MATWRITE</keyword>
+            <keyword>MATWRITEU</keyword>
+            <keyword>MSLEEP</keyword>
+            <keyword>NOBUFF</keyword>
+            <keyword>NULL</keyword>
+            <keyword>OBJEXCALLBACK</keyword>
+            <keyword>OPEN</keyword>
+            <keyword>OPENDEV</keyword>
+            <keyword>OPENPATH</keyword>
+            <keyword>OPENSEQ</keyword>
+            <keyword>OPENSER</keyword>
+            <keyword>OSBREAD</keyword>
+            <keyword>OSBWRITE</keyword>
+            <keyword>OSCLOSE</keyword>
+            <keyword>OSDELETE</keyword>
+            <keyword>OSOPEN</keyword>
+            <keyword>OSREAD</keyword>
+            <keyword>OSWRITE</keyword>
+            <keyword>OUT</keyword>
+            <keyword>PAGE</keyword>
+            <keyword>PASSLIST</keyword>
+            <keyword>PAUSE</keyword>
+            <keyword>PCPERFORM</keyword>
+            <keyword>PERFORM</keyword>
+            <keyword>PRECISION</keyword>
+            <keyword>PRINT</keyword>
+            <keyword>PRINTER</keyword>
+            <keyword>PRINTERR</keyword>
+            <keyword>PROCREAD</keyword>
+            <keyword>PROCWRITE</keyword>
+            <keyword>PROMPT</keyword>
+            <keyword>READ</keyword>
+            <keyword>READBLK</keyword>
+            <keyword>READL</keyword>
+            <keyword>READLIST</keyword>
+            <keyword>READNEXT</keyword>
+            <keyword>READSELECT</keyword>
+            <keyword>READSEQ</keyword>
+            <keyword>READT</keyword>
+            <keyword>READU</keyword>
+            <keyword>READV</keyword>
+            <keyword>READVL</keyword>
+            <keyword>READVU</keyword>
+            <keyword>READXML</keyword>
+            <keyword>RELEASE</keyword>
+            <keyword>REMOVE</keyword>
+            <keyword>RETURNING</keyword>
+            <keyword>REWIND</keyword>
+            <keyword>RQM</keyword>
+            <keyword>RTNDATA</keyword>
+            <keyword>RTNLIST</keyword>
+            <keyword>SEEK</keyword>
+            <keyword>SELECT</keyword>
+            <keyword>SEND</keyword>
+            <keyword>SENDX</keyword>
+            <keyword>SETTING</keyword>
+            <keyword>SLEEP</keyword>
+            <keyword>SSELECT</keyword>
+            <keyword>SSELECTN</keyword>
+            <keyword>SSELECTV</keyword>
+            <keyword>STOP</keyword>
+            <keyword>TIMEOUT</keyword>
+            <keyword>UDTEXECUTE</keyword>
+            <keyword>UNLOCK</keyword>
+            <keyword>WAKE</keyword>
+            <keyword>WEOF</keyword>
+            <keyword>WEOFSEQ</keyword>
+            <keyword>WRITE</keyword>
+            <keyword>WRITEBLK</keyword>
+            <keyword>WRITELIST</keyword>
+            <keyword>WRITESEQ</keyword>
+            <keyword>WRITET</keyword>
+            <keyword>WRITEU</keyword>
+            <keyword>WRITEV</keyword>
+            <keyword>WRITEVU</keyword>
+            <keyword>WRITEXML</keyword>
+        </context>
+
+        <context id="paragraphs" style-ref="function" class="function">
+          <match>\b(\%{identifiers}):</match>
+        </context>
+
+        <context id="paragraph-return" style-ref="function" class="function">
+            <keyword>RETURN</keyword>
+        </context>
+
+        <context id="jbase" class="no-spell-check">
+            <include>
+              <context ref="comment" />
+              <context ref="decimal" />
+              <context ref="double-quoted-string" />
+              <context ref="escape" />
+              <context ref="float" />
+              <context ref="functions" />
+              <context ref="hexadecimal" />
+              <context ref="jbase-functions" />
+              <context ref="keywords" />
+              <context ref="octal" />
+              <context ref="preprocessor" />
+              <context ref="single-quoted-string" />
+              <context ref="paragraph-return" />
+              <context ref="statements" />
+              <context ref="paragraphs" />
+            </include>
+        </context>
+    </definitions>
+</language>
+
