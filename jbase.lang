@@ -24,7 +24,7 @@
   <metadata>
     <property name="mimetypes">application/x-jbase;text/x-jbase</property>
     <property name="globs">*.jbc;*.jbase;*.JBASE;*.JBC</property>
-    <property name="line-comment-start">\*</property>
+    <property name="line-comment-start">*</property>
   </metadata>
 
     <styles>
